@@ -8,7 +8,7 @@ namespace RavMosheShapiro.web.Controllers
     [ApiController]
     public class Search : ControllerBase
     {
-        private readonly string _connectionString = @"server=localhost;userid=root;password=MySQL2944;database=shiurim";
+        private readonly string _connectionString = @"server=localhost;userid=u616411035_searchZya;password=Zya5765!;database=u616411035_SearchShiurim";
 
         [HttpGet]
         [Route("SearchShiurim/{parameters}")]

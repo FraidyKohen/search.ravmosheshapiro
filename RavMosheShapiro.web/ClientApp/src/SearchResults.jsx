@@ -16,12 +16,11 @@ const SearchResults = () => {
 
     useEffect(() => {
         const names = [];
-        searchResults.map(sr => names.push(`${sr.titleCalc} (${sr.parshahEnglish} ${sr.year})`));
+        searchResults.map(sr => names.push(`(${sr.parshahEnglish} ${sr.year})`));
         setItemNames(names);
         const numbers = [];
         searchResults.map(sr => numbers.push(`${sr.version} ${sr.volume}${sr.issue}`))
         setItemNumbers(numbers);
-        console.log(numbers);
         setPurchaseAllPrice(searchResults.length * 3.95);
         const divideSearchResults = () => {
             const searchResultsDivided = [];

@@ -59,7 +59,7 @@ const Home = () => {
     }
 
     const updateSearch = () => {
-        getWordsToDisplay();
+        /*getWordsToDisplay();*/
         setSearchResults(searchedShiurim);
     }
 
@@ -117,7 +117,7 @@ const Home = () => {
     else {
         return (
             <>
-                <div style={{ padding: 180 }}>
+                <div class='container'>
                     <div className='bg-light p-3 rounded shadow justify-content-center flex'>
                         <div className="text-center justify-content-center mb-4" style={{ alignItems: 'flex-end' }}>
                             <div >
@@ -141,7 +141,7 @@ const Home = () => {
                                 </div>
                             </div>
                         </div>
-                    </div>
+                        </div>
                 </div>
                 <footer>
                     <div className='text-center'>

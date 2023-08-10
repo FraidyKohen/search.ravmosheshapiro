@@ -1,4 +1,5 @@
-﻿using MySql.Data.MySqlClient;
+﻿using Microsoft.EntityFrameworkCore.Diagnostics;
+using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -113,6 +114,50 @@ public List<SearchedShiur> SearchShiurimExact(string searchPhrase, MySqlConnecti
         {
             Dictionary<SearchedShiur, int> shiurimForSearch = new Dictionary<SearchedShiur, int>();
             var connection = new MySqlConnection(_connectionString);
+            string GetWordsToDisplay(SearchedShiur currentShiur)
+            {
+                string toDisplay = "";
+                int index = currentShiur.ShiurContent.ToLower().IndexOf(searchPhrase.ToLower());
+                if (index > 0)
+                {
+                    if (index - 30 > 0)
+                    {
+                        toDisplay = currentShiur.ShiurContent.ToLower().Substring(index - 30);
+                    }
+                    else
+                    {
+                        toDisplay = currentShiur.ShiurContent.ToLower().Substring(index);
+                    }
+                }
+                else
+                {
+                    var words = searchPhrase.Split(' ').OrderBy(w => w.Length);
+                    var word = words.First();
+                    index = currentShiur.ShiurContent.ToLower().IndexOf(word.ToLower());
+                    if (index > 0)
+                    {
+                        if (index - 30 > 0)
+                        {
+                            toDisplay = currentShiur.ShiurContent.ToLower().Substring(index - 30);
+                        }
+                        else
+                        {
+                            toDisplay = currentShiur.ShiurContent.ToLower().Substring(index);
+                        }
+                    }
+                }
+                if (toDisplay.Length > 150)
+                {
+                    toDisplay = toDisplay.Substring(0, 150);
+                }
+                var wordsToDisplay = toDisplay.Split(' ');
+                string displayString = "";
+                for (int i = 1; i < wordsToDisplay.Length - 2; i++)
+                {
+                    displayString += $" {wordsToDisplay[i]}";
+                }
+                return displayString;
+            }
             void AddShiurIfNew(SearchedShiur currentShiur)
             {
                 if (!shiurimForSearch.ContainsValue(currentShiur.Id))
@@ -128,7 +173,8 @@ public List<SearchedShiur> SearchShiurimExact(string searchPhrase, MySqlConnecti
                         Issue=currentShiur.Issue,
                         Version=currentShiur.Version,
                         Year=currentShiur.Year,
-                        ParshahEnglish=currentShiur.ParshahEnglish
+                        ParshahEnglish=currentShiur.ParshahEnglish,
+                        WordsToDisplay = GetWordsToDisplay(currentShiur)
                     }, currentShiur.Id);
                 }
             }
@@ -146,7 +192,8 @@ public List<SearchedShiur> SearchShiurimExact(string searchPhrase, MySqlConnecti
                     Issue = currentShiur.Issue,
                     Version=currentShiur.Version,
                     Year=currentShiur.Year,
-                    ParshahEnglish=currentShiur.ParshahEnglish
+                    ParshahEnglish=currentShiur.ParshahEnglish,
+                    WordsToDisplay = GetWordsToDisplay(currentShiur)
                 }, currentShiur.Id);
             }
 
@@ -159,7 +206,8 @@ public List<SearchedShiur> SearchShiurimExact(string searchPhrase, MySqlConnecti
             }
 
             connection.Close();
-            return shiurimForSearch.Keys.ToList();
+            var results= shiurimForSearch.Keys.ToList();
+            return results;
         }
 
         public string SearchShiurimCompletePreliminary(string searchPhrase, int maxSpace)

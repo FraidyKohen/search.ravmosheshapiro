@@ -1,7 +1,10 @@
 ﻿import React, { Children, useEffect, useState } from 'react';
 
 const SearchResultCard = ({ title, date, parshah, volume, issue, displayText, language, parshahEnglish, year }) => {
-    const itemName = `${title} (${parshahEnglish} ${year})`;
+    let itemName = `${title} (${parshahEnglish} ${year})`;
+    if (language === 'hebrew') {
+        itemName = `(${parshahEnglish} ${year})`;
+    }
     const itemNumber = `${language} ${volume}${issue}`;
     const submitTitle = `Add Pamphlet to Cart - ${language}`;
     const viewLink = `https://ravmosheshapiro.com/parshah${volume}.html`
